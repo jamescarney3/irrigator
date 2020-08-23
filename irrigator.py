@@ -42,3 +42,6 @@ def hello_cron():
 def show_me_crons():
     # my_cron = CronTab(user=True)
     return 'foo'
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80, debug=True)
