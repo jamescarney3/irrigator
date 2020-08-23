@@ -12,5 +12,6 @@ minimize risk of the bad kind of irrigation
 main_pump = OutputDevice(14, active_high=False, initial_value=False)
 drain_solenoid = OutputDevice(15, active_high=False, initial_value=False)
 
+time.sleep(45)
 main_pump.off()
 drain_solenoid.off()
