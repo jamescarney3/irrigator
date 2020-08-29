@@ -1,6 +1,5 @@
 <!doctype html>
-{% import '_task.html' as task_helper %}
-<title>turbo irrigator 42069</title>
+<title>turbo irrigator 42069 - add a new task</title>
 <body>
   <div class="header">
     <h1>turbo irrigator 42069</h1>
@@ -15,15 +14,15 @@
   </div>
 
   <div class="content" style="float: left;">
-    <h2>scheduled tasks</h2>
-    {% if main_jobs %}
-      {% for job in main_jobs %}
-        {% if job['enabled'] %}
-          <div>{{ task_helper.summary(job) }}</div>
-        {% endif %}
-      {% endfor %}
-    {% else %}
-      <div>no irrigator tasks in cron table</div>
-    {% endif %}
+    <h2>add a task</h2>
+    <form action="{{ url_for('tasks') }}" method="POST">
+      <div>
+        hour: <input name="hour" />
+      </div>
+      <div>
+        minute: <input name="minute" />
+      </div>
+      <button type="submit">submit</button>
+    </form>
   </div>
 </body>

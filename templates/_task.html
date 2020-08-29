@@ -1,0 +1,20 @@
+{% macro summary(job) -%}
+  <div>
+    <span>{{ job['hour'] }}</span>
+    :
+    <span>{{ job['minute'] }}</span>
+  </div>
+{%- endmacro %}
+
+{% macro admin_detail(job) %}
+  <div>
+    <span>{{ job['hour'] }}</span>:<span>{{ job['minute'] }} {{ '' if job['enabled'] else '(disabled)' }}</span>
+    <form method="POST" action="{{ url_for('delete_task', idx=job['idx']) }}">
+      <button type="submit">delete</button>
+    </form>
+    <form method="POST" action="{{ url_for('update_task', idx=job['idx']) }}">
+      <input type="hidden" name="enabled" value="{{ False if job['enabled'] else True }}" />
+      <button type="submit">{{ 'disable' if job['enabled'] else 'enable' }}</button>
+    </form>
+  </div>
+{%- endmacro %}

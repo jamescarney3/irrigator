@@ -1,4 +1,5 @@
-import gpiozero
+from gpiozero import OutputDevice
+import time
 
 """
 turn off the pump, open the drainage line, don't flood the
