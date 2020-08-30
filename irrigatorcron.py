@@ -16,12 +16,12 @@ def serialize_job(job_tuple):
     hour = job.hour.parts[0]
     minute = job.minute.parts[0]
     enabled = job.is_enabled()
-    return { 'hour': hour - utc_offset, 'minute': minute - utc_offset, 'enabled': enabled, 'idx': idx }
+    return { 'hour': hour - utc_offset, 'minute': minute, 'enabled': enabled, 'idx': idx }
 
 
 class IrrigatorCron:
     def __init__(self):
-        self.crons = CronTab(user=True)
+        self.crons = CronTab(user='pi')
 
     def get_main_jobs(self):
         main_jobs = [job for job in self.crons.find_comment(main_job_identifier)]
@@ -42,7 +42,7 @@ class IrrigatorCron:
     def add_main_job(self, hour, minute):
         new_job = self.crons.new(command=main_job_command, comment=main_job_identifier)
         new_job.hour.on(int(hour) + utc_offset)
-        new_job.minute.on(int(minute) + utc_offset)
+        new_job.minute.on(int(minute))
         self.crons.write()
 
     def delete_main_job(self, idx):
