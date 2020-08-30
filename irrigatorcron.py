@@ -3,8 +3,8 @@ from crontab import CronTab
 import os
 
 utc_offset = 5
-main_job_command = f'python3 {os.getcwd()}/io/main.py'
-failsafe_job_command = f'python3 {os.getcwd()}/io/failsafe.py'
+main_job_command = f'/usr/bin/python3 {os.getcwd()}/io/main.py'
+failsafe_job_command = f'/usr/bin/python3 {os.getcwd()}/io/failsafe.py'
 main_job_identifier = 'python irrigator - main'
 failsafe_job_identifier = 'python irrigator - failsafe'
 
