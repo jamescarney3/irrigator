@@ -2,6 +2,7 @@ from crontab import CronTab
 from crontab import CronTab
 import os
 
+utc_offset = 5
 main_job_command = f'python3 {os.getcwd()}/io/main.py'
 failsafe_job_command = f'python3 {os.getcwd()}/io/failsafe.py'
 main_job_identifier = 'python irrigator - main'
@@ -9,10 +10,13 @@ failsafe_job_identifier = 'python irrigator - failsafe'
 
 def serialize_job(job_tuple):
     (idx, job) = job_tuple
+    print(idx)
+    print(job.hour.parts)
+    print(job.minute.parts)
     hour = job.hour.parts[0]
     minute = job.minute.parts[0]
     enabled = job.is_enabled()
-    return { 'hour': hour, 'minute': minute, 'enabled': enabled, 'idx': idx }
+    return { 'hour': hour - utc_offset, 'minute': minute - utc_offset, 'enabled': enabled, 'idx': idx }
 
 
 class IrrigatorCron:
@@ -37,8 +41,8 @@ class IrrigatorCron:
 
     def add_main_job(self, hour, minute):
         new_job = self.crons.new(command=main_job_command, comment=main_job_identifier)
-        new_job.hour.on(hour)
-        new_job.minute.on(minute)
+        new_job.hour.on(int(hour) + utc_offset)
+        new_job.minute.on(int(minute) + utc_offset)
         self.crons.write()
 
     def delete_main_job(self, idx):
