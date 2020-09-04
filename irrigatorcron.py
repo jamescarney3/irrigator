@@ -10,9 +10,6 @@ failsafe_job_identifier = 'python irrigator - failsafe'
 
 def serialize_job(job_tuple):
     (idx, job) = job_tuple
-    print(idx)
-    print(job.hour.parts)
-    print(job.minute.parts)
     hour = job.hour.parts[0]
     minute = job.minute.parts[0]
     enabled = job.is_enabled()
