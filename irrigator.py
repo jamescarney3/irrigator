@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
-from crontab import CronTab
 import os
 
 from irrigatorcron import IrrigatorCron
 
 app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 i_cron = IrrigatorCron()
 
 # add failsafe job if it doesn't already exist on server start
@@ -48,7 +48,7 @@ def delete_task(idx):
 def tasks():
     if request.method == 'POST':
         form_data = request.form
-        i_cron.add_main_job(form_data['hour'], form_data['minute'])
+        i_cron.add_main_job(int(form_data['hour']), int(form_data['minute']))
         return redirect(url_for('tasks'), code=303) # code 303 enforces GET method
 
     if request.method == 'GET':

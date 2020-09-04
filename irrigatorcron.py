@@ -1,5 +1,4 @@
 from crontab import CronTab
-from crontab import CronTab
 import os
 
 utc_offset = 5
@@ -10,36 +9,36 @@ failsafe_job_identifier = 'python irrigator - failsafe'
 
 def serialize_job(job_tuple):
     (idx, job) = job_tuple
-    hour = job.hour.parts[0]
-    minute = job.minute.parts[0]
+    hour = int(job.hour.render())
+    minute = int(job.minute.render())
     enabled = job.is_enabled()
     return { 'hour': hour - utc_offset, 'minute': minute, 'enabled': enabled, 'idx': idx }
 
-
 class IrrigatorCron:
     def __init__(self):
-        self.crons = CronTab(user='pi')
+        self.crons = CronTab(user=True)
 
     def get_main_jobs(self):
-        main_jobs = [job for job in self.crons.find_comment(main_job_identifier)]
+        main_jobs = list(self.crons.find_comment(main_job_identifier))
         return main_jobs
 
     def get_serialized_jobs(self):
-        return map(serialize_job, enumerate(self.get_main_jobs()))
+        job_key = lambda job: (job['hour'], job['minute'])
+        return sorted(map(serialize_job, enumerate(self.get_main_jobs())), key=job_key)
 
     def get_main_job(self, idx):
-        main_jobs = [job for job in self.crons.find_comment(main_job_identifier)]
+        main_jobs = list(self.crons.find_comment(main_job_identifier))
         return main_jobs[idx]
 
     def get_failsafe_job(self):
-        irrigator_failsafe_jobs = [job for job in self.crons.find_comment(failsafe_job_identifier)]
+        irrigator_failsafe_jobs = list(self.crons.find_comment(failsafe_job_identifier))
         if irrigator_failsafe_jobs:
             return irrigator_failsafe_jobs[0]
 
     def add_main_job(self, hour, minute):
         new_job = self.crons.new(command=main_job_command, comment=main_job_identifier)
-        new_job.hour.on(int(hour) + utc_offset)
-        new_job.minute.on(int(minute))
+        new_job.hour.on(hour + utc_offset)
+        new_job.minute.on(minute)
         self.crons.write()
 
     def delete_main_job(self, idx):
@@ -49,12 +48,12 @@ class IrrigatorCron:
         self.crons.write()
 
     def disable_main_job(self, idx):
-        jobs = [job for job in self.crons.find_comment(main_job_identifier)]
+        jobs = list(self.crons.find_comment(main_job_identifier))
         jobs[idx].enable(False)
         self.crons.write()
 
     def enable_main_job(self, idx):
-        jobs = [job for job in self.crons.find_comment(main_job_identifier)]
+        jobs = list(self.crons.find_comment(main_job_identifier))
         jobs[idx].enable(True)
         self.crons.write()
 

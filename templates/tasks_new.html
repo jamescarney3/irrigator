@@ -1,28 +1,24 @@
-<!doctype html>
-<title>turbo irrigator 42069 - add a new task</title>
-<body>
-  <div class="header">
-    <h1>turbo irrigator 42069</h1>
-    <p><em>flood your apartment!</em></p>
-  </div>
+{% extends '_base.html' %}
 
-  <div class="navigation" style="width: 200px; float: left;">
-    <h2>administer</h2>
-    <div><a href="{{url_for('root')}}">home</a></div>
-    <div><a href="{{url_for('tasks')}}">manage tasks</a></div>
-    <div><a href="{{url_for('create_task')}}">add a task</a></div>
-  </div>
-
-  <div class="content" style="float: left;">
-    <h2>add a task</h2>
-    <form action="{{ url_for('tasks') }}" method="POST">
-      <div>
-        hour: <input name="hour" />
-      </div>
-      <div>
-        minute: <input name="minute" />
-      </div>
-      <button type="submit">submit</button>
-    </form>
-  </div>
-</body>
+{% block content %}
+  <h2>add a task</h2>
+  <form action="{{ url_for('tasks') }}" method="POST" class="task-form">
+    <div class="task-form__input-group">
+      <label>hour:</label>
+      <select name="hour" required>
+        {% for hour in range(0, 24) %}
+          <option value="{{ hour }}">{{ hour }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="task-form__input-group">
+      <label>minute:</label>
+      <select name="minute" required>
+        {% for minute in range(0, 60, 15) %}
+          <option value="{{ minute }}">{{ minute }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit">submit</button>
+  </form>
+{% endblock %}
