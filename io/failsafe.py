@@ -3,7 +3,7 @@ import time
 
 """
 turn off the pump, open the drainage line, don't flood the
-apartment. this should probably run every 5-10 minutes to
+apartment. this should probably run semi-regularly to
 minimize risk of the bad kind of irrigation
 """
 
